@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Red Maple Terminal - 强大的命令行工具</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#E63946', // 枫叶红
+            secondary: '#4D7C0F', // 枫叶绿
+            dark: '#121212',
+            terminal: {
+              bg: '#0F172A',
+              text: '#E2E8F0',
+              prompt: '#10B981',
+              path: '#3B82F6',
+              error: '#EF4444',
+              success: '#10B981',
+              warning: '#F59E0B',
+              info: '#3B82F6'
+            }
+          },
+          fontFamily: {
+            code: ['Fira Code', 'monospace'],
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .terminal-cursor {
+        animation: blink 1s step-end infinite;
+      }
+      @keyframes blink {
+        from, to { opacity: 1; }
+        50% { opacity: 0; }
+      }
+      .scrollbar-thin {
+        scrollbar-width: thin;
+      }
+      .scrollbar-thin::-webkit-scrollbar {
+        width: 6px;
+      }
+      .scrollbar-thin::-webkit-scrollbar-track {
+        background: #1E293B;
+      }
+      .scrollbar-thin::-webkit-scrollbar-thumb {
+        background: #475569;
+        border-radius: 3px;
+      }
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .hover-scale {
+        transition: transform 0.3s ease;
+      }
+      .hover-scale:hover {
+        transform: scale(1.03);
+      }
+      .glass {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+      .terminal-glow {
+        box-shadow: 0 0 15px rgba(22, 218, 106, 0.3);
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 font-sans text-gray-800 overflow-x-hidden">
+  <!-- 导航栏 -->
+  <header class="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-sm shadow-sm z-50 transition-all duration-300">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center">
+        <div class="text-primary text-2xl mr-2">
+          <i class="fa fa-terminal"></i>
+        </div>
+        <h1 class="text-xl font-bold text-gray-800">Red Maple Terminal</h1>
+      </div>
+      
+      <nav class="hidden md:flex items-center space-x-8">
+        <a href="#features" class="text-gray-600 hover:text-primary transition-colors">特性</a>
+        <a href="#commands" class="text-gray-600 hover:text-primary transition-colors">命令</a>
+        <a href="#demo" class="text-gray-600 hover:text-primary transition-colors">在线演示</a>
+        <a href="#download" class="text-gray-600 hover:text-primary transition-colors">下载</a>
+        <a href="#docs" class="text-gray-600 hover:text-primary transition-colors">文档</a>
+      </nav>
+      
+      <div class="flex items-center">
+        <a href="#download" class="hidden md:inline-block bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-md transition-all hover:shadow-lg hover-scale">
+          下载最新版本
+        </a>
+        <button class="md:hidden text-gray-600 text-xl" id="mobile-menu-button">
+          <i class="fa fa-bars"></i>
+        </button>
+      </div>
+    </div>
+    
+    <!-- 移动端菜单 -->
+    <div class="md:hidden hidden bg-white shadow-lg absolute w-full" id="mobile-menu">
+      <div class="container mx-auto px-4 py-3 flex flex-col space-y-4">
+        <a href="#features" class="text-gray-600 hover:text-primary transition-colors py-2">特性</a>
+        <a href="#commands" class="text-gray-600 hover:text-primary transition-colors py-2">命令</a>
+        <a href="#demo" class="text-gray-600 hover:text-primary transition-colors py-2">在线演示</a>
+        <a href="#download" class="text-gray-600 hover:text-primary transition-colors py-2">下载</a>
+        <a href="#docs" class="text-gray-600 hover:text-primary transition-colors py-2">文档</a>
+        <a href="#download" class="bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-md text-center transition-all hover-scale">
+          下载最新版本
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 英雄区域 -->
+  <section class="pt-32 pb-20 bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-1/3 h-full bg-primary/5 -skew-x-12 transform origin-top-right"></div>
+    <div class="absolute bottom-0 left-0 w-1/4 h-1/2 bg-primary/5 skew-x-12 transform origin-bottom-left"></div>
+    
+    <div class="container mx-auto px-4 relative">
+      <div class="flex flex-col md:flex-row items-center">
+        <div class="md:w-1/2 mb-10 md:mb-0">
+          <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-gray-800 leading-tight mb-4">
+            强大的 <span class="text-primary">命令行工具</span><br>
+            为开发者而生
+          </h1>
+          <p class="text-gray-600 text-lg mb-8 max-w-lg">
+            Red Maple Terminal 是一款功能丰富的跨平台终端模拟器，支持多种系统操作和实用工具命令，为开发者提供高效的命令行体验。
+          </p>
+          <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+            <a href="#demo" class="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-md text-center transition-all hover:shadow-lg hover-scale flex items-center justify-center">
+              <i class="fa fa-terminal mr-2"></i>
+              在线体验
+            </a>
+            <a href="#download" class="bg-white hover:bg-gray-100 text-primary border border-primary px-8 py-3 rounded-md text-center transition-all hover:shadow-lg hover-scale flex items-center justify-center">
+              <i class="fa fa-download mr-2"></i>
+              下载安装
+            </a>
+          </div>
+        </div>
+        <div class="md:w-1/2">
+          <div class="bg-gray-800 rounded-xl shadow-2xl overflow-hidden border border-gray-700 hover-scale terminal-glow">
+            <div class="bg-gray-700 border-b border-gray-600 px-4 py-2 flex items-center">
+              <div class="flex space-x-2">
+                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+              </div>
+              <div class="ml-4 text-sm text-gray-300 flex-1">Red Maple Terminal</div>
+            </div>
+            <div class="p-4 text-terminal-text font-code text-sm h-64 overflow-y-auto bg-terminal-bg">
+              <div>Red maple Terminal [Version 8.0-MS]</div>
+              <div class="text-yellow-400">
+                要获得新的红枫终端，请查看 rmt_package.github.io 官网下载或输入“检查版本”检查更新。
+              </div>
+              <div class="text-terminal-prompt">|---------$ echo Hello, Red maple terminal!</div>
+              <div>|Hello, Red maple terminal!</div>
+              <div class="text-terminal-prompt">|---------$ echo 你好，红枫终端！</div>
+              <div>|你好，红枫终端！</div>
+              <div class="text-terminal-prompt">|---------$ </div>
+              <span class="terminal-cursor">|</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 特性部分 -->
+  <section id="features" class="py-20 bg-white relative">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-gray-800 mb-4">强大特性</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">Red Maple Terminal 提供丰富的功能和出色的用户体验，满足开发者的各种需求</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- 特性卡片 1 -->
+        <div class="bg-gray-50 rounded-xl p-6 shadow-md hover-scale border-l-4 border-primary">
+          <div class="text-primary text-3xl mb-4">
+            <i class="fa fa-code"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">支持</h3>
+          <p class="text-gray-600">
+            支持 Windows 系统，提供一致的命令行体验。
+          </p>
+        </div>
+        
+        <!-- 特性卡片 2 -->
+        <div class="bg-gray-50 rounded-xl p-6 shadow-md hover-scale border-l-4 border-primary">
+          <div class="text-primary text-3xl mb-4">
+            <i class="fa fa-bolt"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">高效命令集</h3>
+          <p class="text-gray-600">
+            内置丰富的命令工具，包括文件操作、系统管理、数学计算等，满足日常开发和系统管理需求。
+          </p>
+        </div>
+        
+        <!-- 特性卡片 3 -->
+        <div class="bg-gray-50 rounded-xl p-6 shadow-md hover-scale border-l-4 border-primary">
+          <div class="text-primary text-3xl mb-4">
+            <i class="fa fa-terminal"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">排查模式</h3>
+          <p class="text-gray-600">
+            提供详细的系统日志和排查信息，帮助开发者快速定位和解决问题，提高开发效率。
+          </p>
+        </div>
+        
+        <!-- 特性卡片 4 -->
+        <div class="bg-gray-50 rounded-xl p-6 shadow-md hover-scale border-l-4 border-primary">
+          <div class="text-primary text-3xl mb-4">
+            <i class="fa fa-paint-brush"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">一直更新</h3>
+          <p class="text-gray-600">
+            更新进度快，能体验许多版本，提前了解版本更新。
+          </p>
+        </div>
+        
+        <!-- 特性卡片 5 -->
+        <div class="bg-gray-50 rounded-xl p-6 shadow-md hover-scale border-l-4 border-primary">
+          <div class="text-primary text-3xl mb-4">
+            <i class="fa fa-history"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">加密解密</h3>
+          <p class="text-gray-600">
+            内置多种加密算法，可选择任意一个进行加密解密，自研红枫算法，基于SHA-256，有效提高安全性。
+          </p>
+        </div>
+        
+        <!-- 特性卡片 6 -->
+        <div class="bg-gray-50 rounded-xl p-6 shadow-md hover-scale border-l-4 border-primary">
+          <div class="text-primary text-3xl mb-4">
+            <i class="fa fa-book"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">详细文档</h3>
+          <p class="text-gray-600">
+            提供完整的命令手册和使用指南，帮助用户快速上手，充分发挥终端的强大功能。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 命令部分 -->
+  <section id="commands" class="py-20 bg-gray-50 relative">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-gray-800 mb-4">核心命令</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">探索 Red Maple Terminal 强大的命令集，提升你的工作效率</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-white rounded-xl shadow-md overflow-hidden hover-scale">
+          <div class="bg-gray-800 text-white p-4">
+            <h3 class="font-semibold">系统命令</h3>
+          </div>
+          <div class="p-6">
+            <ul class="space-y-4">
+              <li class="flex items-start">
+                <div class="bg-primary/10 text-primary px-3 py-1 rounded-md font-code mr-4">close pc</div>
+                <div>
+                  <p class="font-medium">关机</p>
+                  <p class="text-gray-600 text-sm">关机命令</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <div class="bg-primary/10 text-primary px-3 py-1 rounded-md font-code mr-4">restart pc</div>
+                <div>
+                  <p class="font-medium">重启</p>
+                  <p class="text-gray-600 text-sm">重启命令</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <div class="bg-primary/10 text-primary px-3 py-1 rounded-md font-code mr-4">cmd</div>
+                <div>
+                  <p class="font-medium">开启命令提示符</p>
+                  <p class="text-gray-600 text-sm">打开Windows自带的命令提示符，便捷切换两种终端</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-xl shadow-md overflow-hidden hover-scale">
+          <div class="bg-gray-800 text-white p-4">
+            <h3 class="font-semibold">实用工具</h3>
+          </div>
+          <div class="p-6">
+            <ul class="space-y-4">
+              <li class="flex items-start">
+                <div class="bg-primary/10 text-primary px-3 py-1 rounded-md font-code mr-4">pi</div>
+                <div>
+                  <p class="font-medium">计算圆周率</p>
+                  <p class="text-gray-600 text-sm">计算指定位数的圆周率（最多20,000位）</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <div class="bg-primary/10 text-primary px-3 py-1 rounded-md font-code mr-4">ascii</div>
+                <div>
+                  <p class="font-medium">字符转ASCII码</p>
+                  <p class="text-gray-600 text-sm">将字符转换为对应的ASCII码值</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <div class="bg-primary/10 text-primary px-3 py-1 rounded-md font-code mr-4">writefile</div>
+                <div>
+                  <p class="font-medium">文件写入</p>
+                  <p class="text-gray-600 text-sm">创建并写入内容到文件</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <div class="bg-primary/10 text-primary px-3 py-1 rounded-md font-code mr-4">echo</div>
+                <div>
+                  <p class="font-medium">输出文本</p>
+                  <p class="text-gray-600 text-sm">输出指定的文本内容</p>
+                </div>
+              </li>
+              <li class="flex items-start">
+                <div class="bg-primary/10 text-primary px-3 py-1 rounded-md font-code mr-4">encrypt/decrypt</div>
+                <div>
+                  <p class="font-medium">加密/解密</p>
+                  <p class="text-gray-600 text-sm">选择加密算法加密/解密内容</p>
+                </div>
+              </li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-12 text-center">
+        <a href="#demo" class="inline-flex items-center text-primary hover:text-primary/80 font-medium hover-scale">
+          查看完整命令列表
+          <i class="fa fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 终端演示部分 -->
+  <section id="demo" class="py-20 bg-white relative">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-gray-800 mb-4">在线体验</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">在浏览器中体验 Red Maple Terminal 的强大功能，无需安装</p>
+      </div>
+      
+      <div class="bg-gray-800 rounded-xl shadow-2xl overflow-hidden border border-gray-700 terminal-glow">
+        <!-- 终端标题栏 -->
+        <div class="bg-gray-800 border-b border-gray-700 px-4 py-2 flex items-center">
+          <div class="flex space-x-2">
+            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+          </div>
+          <div class="ml-4 text-sm text-gray-400 flex-1">Red Maple Terminal - 网页演示</div>
+          <div class="text-gray-400 text-sm">
+            <i class="fa fa-expand"></i>
+          </div>
+        </div>
+        
+        <!-- 终端内容区 -->
+        <div id="web-terminal" class="bg-terminal-bg text-terminal-text font-code h-[500px] overflow-y-auto scrollbar-thin p-4">
+          <div id="terminal-output" class="space-y-2">
+            <div class="text-terminal-text">Red maple Terminal [Version 8.0-MS - 网页演示版]</div>
+            <div class="text-yellow-400">
+              此演示仅支持 echo 命令
+            </div>
+            <div class="text-yellow-400">
+              输入 "echo 文本内容" 测试
+            </div>
+          </div>
+          
+          <!-- 命令输入行 -->
+          <div id="terminal-input-line" class="flex items-center mt-2">
+            <span class="text-terminal-prompt">|---------$ </span>
+            <input 
+              type="text" 
+              id="terminal-command-input" 
+              class="bg-transparent border-none outline-none text-terminal-text font-code flex-1 min-w-0"
+              placeholder="输入 echo 命令..."
+              autocomplete="off"
+            >
+            <span class="terminal-cursor">|</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-8 text-center">
+        <p class="text-gray-600">提示：输入 <span class="font-code bg-gray-100 px-2 py-1 rounded">echo 你好</span> 测试</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 下载部分 -->
+  <section id="download" class="py-20 bg-gray-50 relative">
+    <div class="absolute inset-0 bg-primary/5"></div>
+    <div class="container mx-auto px-4 relative">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-gray-800 mb-4">立即下载</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">获取 Red Maple Terminal 的最新版本，体验完整的命令行功能</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+        <!-- Windows 下载 -->
+        <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-blue-600">
+          <div class="text-4xl text-blue-600 mb-4">
+            <i class="fa fa-windows"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Windows</h3>
+          <p class="text-gray-600 mb-4">适用于 Windows 10/11 的安装包</p>
+          <div class="flex justify-center">
+            <a href="download.html" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale flex items-center">
+              <i class="fa fa-download mr-2"></i>
+              下载
+            </a>
+          </div>
+        </div>
+        
+              </div>
+      
+      <div class="mt-12 text-center">
+        <p class="text-gray-600 mb-4">需要其他平台支持或源码？</p>
+        <a href="#" class="text-primary hover:text-primary/80 font-medium hover-scale">查看 GitHub 仓库</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 文档部分 -->
+  <section id="docs" class="py-20 bg-white relative">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-gray-800 mb-4">文档与支持</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">查看详细的文档和教程，快速上手 Red Maple Terminal</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <!-- 文档卡片 1 -->
+        <div class="bg-gray-50 rounded-xl p-6 shadow-md hover-scale border-l-4 border-primary">
+          <div class="text-primary text-3xl mb-4">
+            <i class="fa fa-book"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">用户手册</h3>
+          <p class="text-gray-600 mb-4">
+            详细介绍 Red Maple Terminal 的安装、配置和基本使用方法，适合新手入门。
+          </p>
+          <a href="help.html" class="text-primary hover:text-primary/80 font-medium inline-flex items-center hover-scale">
+            查看手册
+            <i class="fa fa-arrow-right ml-2"></i>
+          </a>
+        </div>
+        
+        <!-- 文档卡片 2 -->
+        <div class="bg-gray-50 rounded-xl p-6 shadow-md hover-scale border-l-4 border-primary">
+          <div class="text-primary text-3xl mb-4">
+            <i class="fa fa-terminal"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">命令参考</h3>
+          <p class="text-gray-600 mb-4">
+            输入help list或help command，完整的命令列表和详细说明，包括每个命令的语法、参数和使用示例。
+          </p>
+          <a href="docs.html" class="text-primary hover:text-primary/80 font-medium inline-flex items-center hover-scale">
+            查看命令
+            <i class="fa fa-arrow-right ml-2"></i>
+          </a>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="bg-gray-800 text-white py-12 relative">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Red Maple Terminal</h3>
+          <p class="text-gray-400 mb-4">
+            强大的命令行工具，为开发者提供高效的终端体验。
+          </p>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-white transition-colors hover-scale">
+              <i class="fa fa-github text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors hover-scale">
+              <i class="fa fa-twitter text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition-colors hover-scale">
+              <i class="fa fa-linkedin text-xl"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-semibold mb-4">产品</h3>
+          <ul class="space-y-2">
+            <li><a href="#features" class="text-gray-400 hover:text-white transition-colors hover-scale">特性</a></li>
+            <li><a href="#commands" class="text-gray-400 hover:text-white transition-colors hover-scale">命令</a></li>
+            <li><a href="#download" class="text-gray-400 hover:text-white transition-colors hover-scale">下载</a></li>
+            <li><a href="#docs" class="text-gray-400 hover:text-white transition-colors hover-scale">文档</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-semibold mb-4">资源</h3>
+          <ul class="space-y-2">
+            <li><a href="docs.html" class="text-gray-400 hover:text-white transition-colors hover-scale">教程</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-semibold mb-4">联系我们</h3>
+          <ul class="space-y-2">
+            <li class="flex items-center">
+              <i class="fa fa-envelope text-gray-400 mr-2"></i>
+              <a href="mailto:rmt_package@outlook.com" class="text-gray-400 hover:text-white transition-colors hover-scale">support@redmapleterminal.com</a>
+            </li>
+            
+          </ul>
+        </div>
+      </div>
+      
+      <div class="mt-12 pt-8 border-t border-gray-700 text-center text-gray-400">
+        <p>© 2025 Red Maple Terminal. 保留所有权利。</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 移动端菜单切换
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    mobileMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+    
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+          
+          // 关闭移动菜单
+          if (!mobileMenu.classList.contains('hidden')) {
+            mobileMenu.classList.add('hidden');
+          }
+        }
+      });
+    });
+    
+    // 导航栏滚动效果
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      if (window.scrollY > 50) {
+        header.classList.add('py-2', 'shadow-md');
+        header.classList.remove('py-3', 'shadow-sm');
+      } else {
+        header.classList.add('py-3', 'shadow-sm');
+        header.classList.remove('py-2', 'shadow-md');
+      }
+    });
+    
+    // 终端模拟器逻辑
+    // DOM 元素
+    const terminalOutput = document.getElementById('terminal-output');
+    const commandInput = document.getElementById('terminal-command-input');
+    
+    // 滚动到底部
+    function scrollToBottom() {
+      const terminal = document.getElementById('web-terminal');
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    // 输出内容到终端
+    function printToTerminal(text, className = 'text-terminal-text') {
+      const line = document.createElement('div');
+      line.className = className;
+      line.textContent = text;
+      terminalOutput.appendChild(line);
+      scrollToBottom();
+    }
+
+    // 执行命令
+    function executeCommand(command) {
+      // 显示命令输入
+      printToTerminal(`|---------$ ${command}`, 'text-terminal-prompt');
+      
+      // 重置输入
+      commandInput.value = '';
+
+      // 解析命令
+      const [cmd, ...args] = command.trim().split(/\s+/);
+      
+      // 执行命令逻辑
+      if (cmd === 'echo') {
+        printToTerminal(`|${args.join(' ')}`);
+      } else if (command.trim() !== '') {
+        printToTerminal('|错误：此演示仅支持 echo 命令', 'text-terminal-error');
+      }
+    }
+
+    // 处理键盘输入
+    commandInput.addEventListener('keydown', (e) => {
+      // 按下Enter执行命令
+      if (e.key === 'Enter') {
+        executeCommand(commandInput.value);
+      }
+    });
+    
+    // 自动聚焦到输入框
+    commandInput.focus();
+  </script>
+</body>
+</html>

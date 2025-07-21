@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Red Maple Terminal - 下载中心</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#E63946', // 枫叶红
+            secondary: '#1E40AF', // Windows蓝
+            stable: '#10B981', // 稳定版绿色
+            beta: '#F59E0B', // Beta版黄色
+            alpha: '#EF4444', // Alpha版红色
+          },
+          fontFamily: {
+            code: ['Fira Code', 'monospace'],
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .hover-scale {
+        transition: transform 0.3s ease;
+      }
+      .hover-scale:hover {
+        transform: scale(1.03);
+      }
+      .section-divider {
+        height: 4px;
+        width: 60px;
+        background-color: #E63946;
+        border-radius: 2px;
+      }
+      .tab-active {
+        border-bottom: 3px solid #E63946;
+        color: #E63946;
+        font-weight: 600;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 font-sans text-gray-800 overflow-x-hidden">
+  <!-- 导航栏 -->
+  <header class="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-sm shadow-sm z-50 transition-all duration-300">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center">
+        <div class="text-primary text-2xl mr-2">
+          <i class="fa fa-terminal"></i>
+        </div>
+        <h1 class="text-xl font-bold text-gray-800">Red Maple Terminal</h1>
+      </div>
+      
+      <nav class="hidden md:flex items-center space-x-8">
+        <a href="index.html" class="text-gray-600 hover:text-primary transition-colors">首页</a>
+        <a href="#" class="text-primary font-medium">下载中心</a>
+        <a href="docs.html" class="text-gray-600 hover:text-primary transition-colors">文档</a>
+        <a href="help.html" class="text-gray-600 hover:text-primary transition-colors">支持</a>
+      </nav>
+      
+      <div class="flex items-center">
+        <button class="md:hidden text-gray-600 text-xl" id="mobile-menu-button">
+          <i class="fa fa-bars"></i>
+        </button>
+      </div>
+    </div>
+    
+    <!-- 移动端菜单 -->
+    <div class="md:hidden hidden bg-white shadow-lg absolute w-full" id="mobile-menu">
+      <div class="container mx-auto px-4 py-3 flex flex-col space-y-4">
+        <a href="#" class="text-gray-600 hover:text-primary transition-colors py-2">首页</a>
+        <a href="#" class="text-primary font-medium py-2">下载中心</a>
+        <a href="#" class="text-gray-600 hover:text-primary transition-colors py-2">文档</a>
+        <a href="#" class="text-gray-600 hover:text-primary transition-colors py-2">支持</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 英雄区域 -->
+  <section class="pt-32 pb-20 bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-1/3 h-full bg-primary/5 -skew-x-12 transform origin-top-right"></div>
+    
+    <div class="container mx-auto px-4 relative">
+      <div class="text-center max-w-3xl mx-auto">
+        <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-gray-800 leading-tight mb-4">
+          下载 <span class="text-primary">Red Maple Terminal</span>
+        </h1>
+        <p class="text-gray-600 text-lg mb-8">
+          选择适合您的版本，支持 Windows 系统，下载即用
+        </p>
+        <div class="section-divider mx-auto"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 版本选择部分 -->
+  <section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <div class="max-w-5xl mx-auto">
+        <!-- 版本标签切换 -->
+        <div class="mb-8 overflow-x-auto scrollbar-hide">
+          <div class="flex space-x-2 md:space-x-6 min-w-max pb-2">
+            <button class="tab-btn tab-active px-4 py-2 text-gray-700 transition-colors hover-scale" data-version="9.0">
+              v9.0-S.Z
+            </button>
+            <button class="tab-btn px-4 py-2 text-gray-700 transition-colors hover-scale" data-version="8.1">
+              v8.1-P
+            </button>
+            <button class="tab-btn px-4 py-2 text-gray-700 transition-colors hover-scale" data-version="8.0">
+              v8.0-MS
+            </button>
+            <button class="tab-btn px-4 py-2 text-gray-700 transition-colors hover-scale" data-version="7.8">
+              v7.8-MS
+            </button>
+            <button class="tab-btn px-4 py-2 text-gray-700 transition-colors hover-scale" data-version="6.0">
+              v6.0
+            </button>
+            <button class="tab-btn px-4 py-2 text-gray-700 transition-colors hover-scale" data-version="5.0">
+              v5.0
+            </button>
+            <button class="tab-btn px-4 py-2 text-gray-700 transition-colors hover-scale" data-version="4.0">
+              v4.0
+            </button>
+            <button class="tab-btn px-4 py-2 text-gray-700 transition-colors hover-scale" data-version="3.0">
+              v3.0
+            </button>
+          </div>
+        </div>
+        
+        <!-- 最新版本提示 -->
+        <div class="bg-primary/10 border-l-4 border-primary p-4 rounded-r mb-10">
+          <div class="flex items-start">
+            <i class="fa fa-lightbulb-o text-primary text-xl mt-1 mr-3"></i>
+            <div>
+              <h3 class="font-semibold text-gray-800">推荐下载最新版本</h3>
+              <p class="text-gray-600">v9.0-S.Z是最新稳定版，包含最新功能和安全更新，建议大多数用户下载使用。</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 版本内容区域 -->
+        <div class="tab-content" id="version-9.0">
+          <div class="mb-8">
+            <h2 class="text-2xl font-bold mb-4 flex items-center">
+              <span class="bg-primary/10 text-primary px-3 py-1 rounded mr-3">v9.0-S.Z</span>
+              最新稳定版
+            </h2>
+            <p class="text-gray-600 mb-6">发布日期：2025年7月21日 | 支持系统：Windows 10/11 (64位)</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <!-- 正式版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-stable">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">正式版</h3>
+                  <span class="bg-stable/10 text-stable px-2 py-1 rounded text-sm font-medium">稳定</span>
+                </div>
+                <p class="text-gray-600 mb-4">
+                  经过全面测试的稳定版本，适合日常使用
+                </p>
+                <ul class="text-gray-600 mb-6 space-y-2">
+                  <li class="flex items-center">
+                    <i class="fa fa-check text-stable mr-2"></i>
+                    完整功能支持
+                  </li>
+                  <li class="flex items-center">
+                    <i class="fa fa-check text-stable mr-2"></i>
+                    安全补丁更新
+                  </li>
+                  <li class="flex items-center">
+                    <i class="fa fa-check text-stable mr-2"></i>
+                    优先技术支持
+                  </li>
+                </ul>
+                <a href="file/redmapleterminal_v9.0s.z.exe" class="block w-full bg-stable hover:bg-stable/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载安装包
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：2.16 MB</p>
+              </div>
+              
+              <!-- Beta版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-beta">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">Beta版</h3>
+                  <span class="bg-beta/10 text-beta px-2 py-1 rounded text-sm font-medium">测试</span>
+                </div>
+                <p class="text-gray-600 mb-4">
+                  包含最新功能，适合体验新特性的用户
+                </p>
+                <ul class="text-gray-600 mb-6 space-y-2">
+                  <li class="flex items-center">
+                    <i class="fa fa-check text-beta mr-2"></i>
+                    抢先体验新功能
+                  </li>
+                  <li class="flex items-center">
+                    <i class="fa fa-check text-beta mr-2"></i>
+                    主要问题已修复
+                  </li>
+                  <li class="flex items-center">
+                    <i class="fa fa-exclamation-triangle text-yellow-500 mr-2"></i>
+                    可能存在少量bug
+                  </li>
+                </ul>
+                <a href="file/redmapleterminal_v9.0s.z.exe" class="block w-full bg-beta hover:bg-beta/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载Beta版
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：2.16 MB</p>
+              </div>
+              
+              <!-- Alpha版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-alpha">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">Test版</h3>
+                  <span class="bg-alpha/10 text-alpha px-2 py-1 rounded text-sm font-medium">只含开发内容</span>
+                </div>
+                <p class="text-gray-600 mb-4">
+                  开发中的预览版本，包含实验性功能
+                </p>
+                <ul class="text-gray-600 mb-6 space-y-2">
+                  <li class="flex items-center">
+                    <i class="fa fa-check text-alpha mr-2"></i>
+                    最新实验性功能
+                  </li>
+                  <li class="flex items-center">
+                    <i class="fa fa-exclamation-triangle text-yellow-500 mr-2"></i>
+                    可能存在较多问题
+                  </li>
+                  <li class="flex items-center">
+                    <i class="fa fa-exclamation-triangle text-yellow-500 mr-2"></i>
+                    不建议用于生产环境
+                  </li>
+                </ul>
+                <a href="file/redmapleterminal_v9.0t.x.exe" class="block w-full bg-alpha hover:bg-alpha/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载Test版
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：2.03 MB</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-gray-50 rounded-xl p-6">
+            <h3 class="text-xl font-semibold mb-4">v9.0 更新内容</h3>
+            <ul class="space-y-2 text-gray-600">
+              <li class="flex items-start">
+                <i class="fa fa-arrow-right text-primary mt-1 mr-3"></i>
+                <span>新增加密/解密功能，让文本更安全</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-arrow-right text-primary mt-1 mr-3"></i>
+                <span>新增清屏功能，让终端更简洁</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-arrow-right text-primary mt-1 mr-3"></i>
+                <span>改进help，现在重新支持help list</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-arrow-right text-primary mt-1 mr-3"></i>
+                <span>修复已知bug，提升稳定性</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="tab-content hidden" id="version-8.1">
+          <div class="mb-8">
+            <h2 class="text-2xl font-bold mb-4 flex items-center">
+              <span class="bg-primary/10 text-primary px-3 py-1 rounded mr-3">v8.1-P</span>
+              稳定版
+            </h2>
+            <p class="text-gray-600 mb-6">发布日期：2025年7月18日 | 支持系统：Windows 10/11 (64位)</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <!-- 正式版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-stable">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">正式版</h3>
+                  <span class="bg-stable/10 text-stable px-2 py-1 rounded text-sm font-medium">稳定</span>
+                </div>
+                <p class="text-gray-600 mb-6">经过全面测试的稳定版本</p>
+                <a href="file/redmapleterminal_v8.1p.exe" class="block w-full bg-stable hover:bg-stable/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载安装包
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：1.96 MB</p>
+              </div>
+              
+              <!-- Beta版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-beta">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">Beta版</h3>
+                  <span class="bg-beta/10 text-beta px-2 py-1 rounded text-sm font-medium">历史版本</span>
+                </div>
+                <p class="text-gray-600 mb-6">早期测试版本</p>
+                <a href="file/redmapleterminal_v8.1p.exe" class="block w-full bg-beta hover:bg-beta/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载Beta版
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：1.96 MB</p>
+              </div>
+                            <!-- Alpha版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-alpha">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">RC预发布版</h3>
+                  <span class="bg-alpha/10 text-alpha px-2 py-1 rounded text-sm font-medium">历史版本</span>
+                </div>
+                <p class="text-gray-600 mb-6">预发布预览版本</p>
+                <a href="file/redmapleterminal_v8.1rc1.exe" class="block w-full bg-alpha hover:bg-alpha/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载RC版
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：1.96 MB</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-gray-50 rounded-xl p-6">
+            <h3 class="text-xl font-semibold mb-4">v8.1 更新内容</h3>
+            <ul class="space-y-2 text-gray-600">
+              <li class="flex items-start">
+                <i class="fa fa-arrow-right text-primary mt-1 mr-3"></i>
+                <span>修复help list输出不了指令列表的错误</span>
+              </li>
+              
+              
+            </ul>
+          </div>
+        </div>
+        
+        <div class="tab-content hidden" id="version-8.0">
+          <div class="mb-8">
+            <h2 class="text-2xl font-bold mb-4 flex items-center">
+              <span class="bg-primary/10 text-primary px-3 py-1 rounded mr-3">v8.0-MS</span>
+              稳定版
+            </h2>
+            <p class="text-gray-600 mb-6">发布日期：2025年7月17日 | 支持系统：Windows 10/11 (64位)</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <!-- 正式版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-stable">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">正式版</h3>
+                  <span class="bg-stable/10 text-stable px-2 py-1 rounded text-sm font-medium">稳定</span>
+                </div>
+                <p class="text-gray-600 mb-6">经过全面测试的稳定版本</p>
+                <a href="file/redmapleterminal_v8.0ms.exe" class="block w-full bg-stable hover:bg-stable/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载安装包
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：1.96 MB</p>
+              </div>
+              
+              <!-- Beta版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-beta">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">Beta版</h3>
+                  <span class="bg-beta/10 text-beta px-2 py-1 rounded text-sm font-medium">历史版本</span>
+                </div>
+                <p class="text-gray-600 mb-6">早期测试版本</p>
+                <a href="file/redmapleterminal_v8.0ms.exe" class="block w-full bg-beta hover:bg-beta/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载Beta版
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：1.96 MB</p>
+              </div>
+              
+              <!-- Alpha版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-alpha">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">Alpha版</h3>
+                  <span class="bg-alpha/10 text-alpha px-2 py-1 rounded text-sm font-medium">历史版本</span>
+                </div>
+                <p class="text-gray-600 mb-6">早期开发预览版本</p>
+                <a href="file/redmapleterminal_v8.0ms.exe" class="block w-full bg-alpha hover:bg-alpha/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载Alpha版
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：1.96 MB</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-gray-50 rounded-xl p-6">
+            <h3 class="text-xl font-semibold mb-4">v8.0 更新内容</h3>
+            <ul class="space-y-2 text-gray-600">
+              <li class="flex items-start">
+                <i class="fa fa-arrow-right text-primary mt-1 mr-3"></i>
+                <span>新增排查模式</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-arrow-right text-primary mt-1 mr-3"></i>
+                <span>改进终端窗口大小调整体验</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-arrow-right text-primary mt-1 mr-3"></i>
+                <span>pi变为输入位数输出</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="tab-content hidden" id="version-7.8">
+          <div class="mb-8">
+            <h2 class="text-2xl font-bold mb-4 flex items-center">
+              <span class="bg-primary/10 text-primary px-3 py-1 rounded mr-3">v7.8</span>
+              稳定版
+            </h2>
+            <p class="text-gray-600 mb-6">发布日期：2025年7月17日 | 支持系统：Windows 10/11 (64位)</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <!-- 正式版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-stable">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">正式版</h3>
+                  <span class="bg-stable/10 text-stable px-2 py-1 rounded text-sm font-medium">稳定</span>
+                </div>
+                <p class="text-gray-600 mb-6">经过全面测试的稳定版本</p>
+                <a href="file/redmapleterminal_v7.8ms.exe" class="block w-full bg-stable hover:bg-stable/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载安装包
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：1.95 MB</p>
+              </div>
+              
+              <!-- Beta版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-beta">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">Beta版</h3>
+                  <span class="bg-beta/10 text-beta px-2 py-1 rounded text-sm font-medium">历史版本</span>
+                </div>
+                <p class="text-gray-600 mb-6">早期测试版本</p>
+                <a href="file/redmapleterminal_v7.8ms.exe" class="block w-full bg-beta hover:bg-beta/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载Beta版
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：1.95 MB</p>
+              </div>
+              
+              <!-- Alpha版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-alpha">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">Alpha版</h3>
+                  <span class="bg-alpha/10 text-alpha px-2 py-1 rounded text-sm font-medium">历史版本</span>
+                </div>
+                <p class="text-gray-600 mb-6">早期开发预览版本</p>
+                <a href="file/redmapleterminal_v7.8ms.exe" class="block w-full bg-alpha hover:bg-alpha/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载Alpha版
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：1.95 MB</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-gray-50 rounded-xl p-6">
+            <h3 class="text-xl font-semibold mb-4">v7.8 更新内容</h3>
+            <ul class="space-y-2 text-gray-600">
+              <li class="flex items-start">
+                <i class="fa fa-arrow-right text-primary mt-1 mr-3"></i>
+                <span>新增文件写入和转换</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-arrow-right text-primary mt-1 mr-3"></i>
+                <span>更换版本号</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-arrow-right text-primary mt-1 mr-3"></i>
+                <span>修复若干稳定性问题</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="tab-content hidden" id="version-6.0">
+          <div class="mb-8">
+            <h2 class="text-2xl font-bold mb-4 flex items-center">
+              <span class="bg-primary/10 text-primary px-3 py-1 rounded mr-3">v6.0</span>
+              稳定版
+            </h2>
+            <p class="text-gray-600 mb-6">发布日期：2024年7月20日 | 支持系统：Windows 10/11 (64位)</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <!-- 正式版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-stable">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">正式版</h3>
+                  <span class="bg-stable/10 text-stable px-2 py-1 rounded text-sm font-medium">稳定</span>
+                </div>
+                <p class="text-gray-600 mb-6">经过全面测试的稳定版本</p>
+                <a href="file/redmapleterminal_v6.0.exe" class="block w-full bg-stable hover:bg-stable/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载安装包
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：1.94 MB</p>
+              </div>
+              
+              <!-- Beta版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-beta">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">Beta版</h3>
+                  <span class="bg-beta/10 text-beta px-2 py-1 rounded text-sm font-medium">历史版本</span>
+                </div>
+                <p class="text-gray-600 mb-6">早期测试版本</p>
+                <a href="file/redmapleterminal_v6.0.exe" class="block w-full bg-beta hover:bg-beta/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载Beta版
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：1.94 MB</p>
+              </div>
+              
+              <!-- Alpha版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-alpha">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">Alpha版</h3>
+                  <span class="bg-alpha/10 text-alpha px-2 py-1 rounded text-sm font-medium">历史版本</span>
+                </div>
+                <p class="text-gray-600 mb-6">早期开发预览版本</p>
+                <a href="file/redmapleterminal_v6.0.exe" class="block w-full bg-alpha hover:bg-alpha/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载Alpha版
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：1.94 MB</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-gray-50 rounded-xl p-6">
+            <h3 class="text-xl font-semibold mb-4">v6.0 更新内容</h3>
+            <ul class="space-y-2 text-gray-600">
+              <li class="flex items-start">
+                <i class="fa fa-arrow-right text-primary mt-1 mr-3"></i>
+                <span>暂无记录</span>
+              </li>
+                          </ul>
+          </div>
+        </div>
+        
+        <div class="tab-content hidden" id="version-5.0">
+          <div class="mb-8">
+            <h2 class="text-2xl font-bold mb-4 flex items-center">
+              <span class="bg-primary/10 text-primary px-3 py-1 rounded mr-3">v5.0</span>
+              稳定版
+            </h2>
+            <p class="text-gray-600 mb-6">发布日期：2024年4月26日 | 支持系统：Windows 10/11 (64位)</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <!-- 正式版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-stable">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">正式版</h3>
+                  <span class="bg-stable/10 text-stable px-2 py-1 rounded text-sm font-medium">稳定</span>
+                </div>
+                <p class="text-gray-600 mb-6">经过全面测试的稳定版本</p>
+                <a href="file/redmapleterminal_v5.0.exe" class="block w-full bg-stable hover:bg-stable/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载安装包
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：1.94 MB</p>
+              </div>
+              
+              <!-- Beta版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-beta">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">Beta版</h3>
+                  <span class="bg-beta/10 text-beta px-2 py-1 rounded text-sm font-medium">历史版本</span>
+                </div>
+                <p class="text-gray-600 mb-6">早期测试版本</p>
+                <a href="file/redmapleterminal_v5.0.exe" class="block w-full bg-beta hover:bg-beta/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载Beta版
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：1.94 MB</p>
+              </div>
+              
+              <!-- Alpha版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-alpha">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">Alpha版</h3>
+                  <span class="bg-alpha/10 text-alpha px-2 py-1 rounded text-sm font-medium">历史版本</span>
+                </div>
+                <p class="text-gray-600 mb-6">早期开发预览版本</p>
+                <a href="file/redmapleterminal_v5.0.exe" class="block w-full bg-alpha hover:bg-alpha/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载Alpha版
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：1.94 MB</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-gray-50 rounded-xl p-6">
+            <h3 class="text-xl font-semibold mb-4">v5.0 更新内容</h3>
+            <ul class="space-y-2 text-gray-600">
+              <li class="flex items-start">
+                <i class="fa fa-arrow-right text-primary mt-1 mr-3"></i>
+                <span>新增多语言切换功能，支持中文和English</span>
+              </li>
+              
+            </ul>
+          </div>
+        </div>
+        
+        <div class="tab-content hidden" id="version-4.0">
+          <div class="mb-8">
+            <h2 class="text-2xl font-bold mb-4 flex items-center">
+              <span class="bg-primary/10 text-primary px-3 py-1 rounded mr-3">v4.0</span>
+              稳定版
+            </h2>
+            <p class="text-gray-600 mb-6">发布日期：2024年4月24日 | 支持系统：Windows 10/11 (64位)</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <!-- 正式版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-stable">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">正式版</h3>
+                  <span class="bg-stable/10 text-stable px-2 py-1 rounded text-sm font-medium">稳定</span>
+                </div>
+                <p class="text-gray-600 mb-6">经过全面测试的稳定版本</p>
+                <a href="file/redmapleterminal_v4.0.exe" class="block w-full bg-stable hover:bg-stable/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载安装包
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：2.95 MB</p>
+              </div>
+              
+              <!-- Beta版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-beta">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">Beta版</h3>
+                  <span class="bg-beta/10 text-beta px-2 py-1 rounded text-sm font-medium">历史版本</span>
+                </div>
+                <p class="text-gray-600 mb-6">早期测试版本</p>
+                <a href="file/redmapleterminal_v4.0.exe" class="block w-full bg-beta hover:bg-beta/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载Beta版
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：2.95 MB</p>
+              </div>
+              
+              <!-- Alpha版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-alpha">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">Alpha版</h3>
+                  <span class="bg-alpha/10 text-alpha px-2 py-1 rounded text-sm font-medium">历史版本</span>
+                </div>
+                <p class="text-gray-600 mb-6">早期开发预览版本</p>
+                <a href="file/redmapleterminal_v4.0.exe" class="block w-full bg-alpha hover:bg-alpha/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载Alpha版
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：2.95 MB</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-gray-50 rounded-xl p-6">
+            <h3 class="text-xl font-semibold mb-4">v4.0 更新内容</h3>
+            <ul class="space-y-2 text-gray-600">
+              <li class="flex items-start">
+                <i class="fa fa-arrow-right text-primary mt-1 mr-3"></i>
+                <span>基础命令行功能实现</span>
+              </li>
+ 
+            </ul>
+          </div>
+        </div>
+<div class="tab-content hidden" id="version-3.0">
+          <div class="mb-8">
+            <h2 class="text-2xl font-bold mb-4 flex items-center">
+              <span class="bg-primary/10 text-primary px-3 py-1 rounded mr-3">v3.0</span>
+              稳定版
+            </h2>
+            <p class="text-gray-600 mb-6">发布日期：2024年4月24日 | 支持系统：Windows 10/11 (64位)</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <!-- 正式版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-stable">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">正式版</h3>
+                  <span class="bg-stable/10 text-stable px-2 py-1 rounded text-sm font-medium">稳定</span>
+                </div>
+                <p class="text-gray-600 mb-6">经过全面测试的稳定版本</p>
+                <a href="file/redmapleterminal_v3.0.exe" class="block w-full bg-stable hover:bg-stable/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载安装包
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：2.95 MB</p>
+              </div>
+              
+              <!-- Beta版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-beta">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">Beta版</h3>
+                  <span class="bg-beta/10 text-beta px-2 py-1 rounded text-sm font-medium">历史版本</span>
+                </div>
+                <p class="text-gray-600 mb-6">早期测试版本</p>
+                <a href="file/redmapleterminal_v3.0.exe" class="block w-full bg-beta hover:bg-beta/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载Beta版
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：2.95 MB</p>
+              </div>
+              
+              <!-- Alpha版 -->
+              <div class="bg-white rounded-xl p-6 shadow-md hover-scale border-t-4 border-alpha">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="text-xl font-semibold">Alpha版</h3>
+                  <span class="bg-alpha/10 text-alpha px-2 py-1 rounded text-sm font-medium">历史版本</span>
+                </div>
+                <p class="text-gray-600 mb-6">早期开发预览版本</p>
+                <a href="file/redmapleterminal_v3.0.exe" class="block w-full bg-alpha hover:bg-alpha/90 text-white text-center px-6 py-3 rounded-md transition-all hover:shadow-lg hover-scale">
+                  <i class="fa fa-download mr-2"></i>
+                  下载Alpha版
+                </a>
+                <p class="text-gray-500 text-sm text-center mt-3">文件大小：2.95 MB</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-gray-50 rounded-xl p-6">
+            <h3 class="text-xl font-semibold mb-4">v3.0 更新内容</h3>
+            <ul class="space-y-2 text-gray-600">
+              <li class="flex items-start">
+                <i class="fa fa-arrow-right text-primary mt-1 mr-3"></i>
+                <span>基础命令行功能实现</span>
+              </li>
+ 
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 系统要求部分 -->
+  <section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-2xl font-bold mb-6">系统要求</h2>
+        <div class="bg-white rounded-xl p-6 shadow-md">
+          <ul class="space-y-4">
+            <li class="flex items-start">
+              <i class="fa fa-windows text-primary mt-1 mr-3"></i>
+              <div>
+                <h3 class="font-semibold">操作系统</h3>
+                <p class="text-gray-600">Windows 10 (64位) 或更高版本</p>
+              </div>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-microchip text-primary mt-1 mr-3"></i>
+              <div>
+                <h3 class="font-semibold">处理器</h3>
+                <p class="text-gray-600">1 GHz 或更快的处理器</p>
+              </div>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-memory text-primary mt-1 mr-3"></i>
+              <div>
+                <h3 class="font-semibold">内存</h3>
+                <p class="text-gray-600">512 MB RAM 或更高</p>
+              </div>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-hdd-o text-primary mt-1 mr-3"></i>
+              <div>
+                <h3 class="font-semibold">存储空间</h3>
+                <p class="text-gray-600">至少 10 MB 可用空间</p>
+              </div>
+            </li>
+            <li class="flex items-start">
+              <i class="fa fa-tv text-primary mt-1 mr-3"></i>
+              <div>
+                <h3 class="font-semibold">显示</h3>
+                <p class="text-gray-600">1024x768 或更高分辨率</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 下载提示区 -->
+  <section class="py-16 bg-primary/10">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">准备好开始使用了吗？</h2>
+      <a href="file/redmapleterminal_v9.0s.z" class="inline-block bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-md transition-all hover:shadow-lg hover-scale text-lg">
+        <i class="fa fa-download mr-2"></i>
+        下载最新稳定版 (v9.0-S.Z)
+      </a>
+      <p class="text-gray-600 mt-4">
+        所有版本均为下载即用，无需复杂配置
+      </p>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="bg-gray-800 text-white py-12">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-6 md:mb-0">
+          <div class="flex items-center">
+            <div class="text-primary text-2xl mr-2">
+              <i class="fa fa-terminal"></i>
+            </div>
+            <h3 class="text-xl font-semibold">Red Maple Terminal</h3>
+          </div>
+          <p class="text-gray-400 mt-2">
+            专为 Windows 设计的轻量级终端工具
+          </p>
+        </div>
+        
+        <div class="text-gray-400 text-center">
+          © 2025 Red Maple Terminal. 保留所有权利。
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 版本标签切换
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // 移除所有按钮的活动状态
+        tabButtons.forEach(btn => btn.classList.remove('tab-active'));
+        
+        // 添加当前按钮的活动状态
+        button.classList.add('tab-active');
+        
+        // 隐藏所有内容
+        tabContents.forEach(content => content.classList.add('hidden'));
+        
+        // 显示对应内容
+        const version = button.getAttribute('data-version');
+        document.getElementById(`version-${version}`).classList.remove('hidden');
+        
+        // 平滑滚动到内容区域
+        const targetElement = document.getElementById(`version-${version}`);
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 100,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+    
+    // 移动端菜单切换
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    mobileMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+    
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+          
+          // 关闭移动菜单
+          if (!mobileMenu.classList.contains('hidden')) {
+            mobileMenu.classList.add('hidden');
+          }
+        }
+      });
+    });
+    
+    // 导航栏滚动效果
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      if (window.scrollY > 50) {
+        header.classList.add('py-2', 'shadow-md');
+        header.classList.remove('py-3', 'shadow-sm');
+      } else {
+        header.classList.add('py-3', 'shadow-sm');
+        header.classList.remove('py-2', 'shadow-md');
+      }
+    });
+  </script>
+</body>
+</html>
